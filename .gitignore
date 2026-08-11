@@ -1,0 +1,12 @@
+/.docs/
+
+# Go build and test artifacts
+/bin/
+/dist/
+/labtop
+*.test
+coverage.out
+*.coverprofile
+
+# Operating-system artifacts
+.DS_Store

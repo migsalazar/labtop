@@ -1,0 +1,85 @@
+package app
+
+import (
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
+)
+
+const (
+	identityColor  = lipgloss.Color("#9B7CFF")
+	primaryColor   = lipgloss.Color("#F0F0E6")
+	secondaryColor = lipgloss.Color("#7D828A")
+)
+
+var (
+	titleStyle = lipgloss.NewStyle().
+			Bold(true).
+			Foreground(identityColor)
+	bodyStyle = lipgloss.NewStyle().
+			Foreground(primaryColor)
+	hintStyle = lipgloss.NewStyle().
+			Foreground(secondaryColor)
+)
+
+// Model is the initial Labtop Bubble Tea model.
+type Model struct {
+	width  int
+	height int
+}
+
+// NewModel returns the truthful initial placeholder model.
+func NewModel() Model {
+	return Model{}
+}
+
+// Init starts no background work in the current scaffold.
+func (Model) Init() tea.Cmd {
+	return nil
+}
+
+// Update handles terminal sizing and the two immediate quit keys.
+func (model Model) Update(message tea.Msg) (tea.Model, tea.Cmd) {
+	switch message := message.(type) {
+	case tea.KeyMsg:
+		switch message.String() {
+		case "q", "ctrl+c":
+			return model, tea.Quit
+		}
+	case tea.WindowSizeMsg:
+		model.width = message.Width
+		model.height = message.Height
+	}
+
+	return model, nil
+}
+
+// View renders only truthful scaffold state.
+func (model Model) View() string {
+	content := lipgloss.JoinVertical(
+		lipgloss.Center,
+		titleStyle.Render("LABTOP // CONSOLE"),
+		"",
+		bodyStyle.Render("Monitoring features are not implemented yet."),
+		"",
+		hintStyle.Render("q quit"),
+	)
+
+	if model.width <= 0 || model.height <= 0 {
+		return content
+	}
+
+	return lipgloss.Place(
+		model.width,
+		model.height,
+		lipgloss.Center,
+		lipgloss.Center,
+		content,
+	)
+}
+
+// Run starts Labtop in the terminal alternate screen.
+func Run() error {
+	program := tea.NewProgram(NewModel(), tea.WithAltScreen())
+	_, err := program.Run()
+	return err
+}
