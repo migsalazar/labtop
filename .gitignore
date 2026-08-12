@@ -1,5 +1,9 @@
 /.docs/
 /.tmp/
+/config.toml
+/.env
+/.env.*
+!/.env.example
 
 # Go build and test artifacts
 /bin/

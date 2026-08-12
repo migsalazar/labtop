@@ -4,23 +4,42 @@ Labtop is an early Go terminal application intended for a small, always-on Raspb
 
 ## Current behavior
 
-The current scaffold:
+The current application:
 
 - Opens in the terminal alternate screen
 - Centers a placeholder when terminal dimensions are available
 - Exits with `q` or `Ctrl+C`
 - Provides `--help`
-- Contains no configuration, collectors, network probes, metrics, persistence, or external-process integration
+- Loads validated local TOML configuration before entering the alternate screen
+- Supports a configured display title and a validated three-column arrangement of built-in module definitions
+- Contains no collectors, network probes, metrics, persistence, or external-process integration
 
-Monitoring features are not implemented yet.
+Monitoring features are not implemented yet. Configured modules are validated but are not rendered or collected yet.
+
+## Configuration
+
+Labtop accepts an optional configuration path:
+
+```bash
+go run ./cmd/labtop --config config.example.toml
+```
+
+Without `--config`, Labtop looks for `config.toml` in the current directory. If that file is absent, it uses generic built-in defaults. An explicitly requested file must exist and be valid.
+
+Configuration is decoded strictly. Unknown fields, unsupported module types, mismatched settings blocks, invalid intervals, invalid machine ports, and overlapping or out-of-bounds grid positions fail before the TUI starts.
+
+The built-in module registry currently recognizes `system`, `machines`, `agents`, and `events`. No collector or agent provider is implemented. External targets and machine definitions are configuration data only and are never contacted by the current application.
+
+Use `config.example.toml` as the sanitized reference. Keep deployment-specific values in the ignored local `config.toml`. Do not put credentials, tokens, or secrets in configuration; Labtop does not accept or require them.
 
 ## Environment
 
 - Minimum Go language version: 1.25
 - Preferred project toolchain: Go 1.26.5
-- Development platform currently verified: macOS ARM64
-- Cross-build currently verified: Linux ARM64 with `CGO_ENABLED=0`
-- Raspberry Pi runtime behavior has not yet been validated on the physical device
+- Development platform verified: macOS ARM64
+- Runtime platform verified: Raspberry Pi OS/Linux ARM64 on a Raspberry Pi 5
+- Target display verified: 1024×600 terminal display
+- Cross-build verified: Linux ARM64 with `CGO_ENABLED=0`
 
 ## Building and running
 
@@ -67,7 +86,7 @@ Detach with `Ctrl+B`, then `D`. Reattach with:
 tmux attach -t labtop
 ```
 
-Labtop also runs directly without tmux.
+Labtop also runs directly without tmux. A tmux window shared by clients with different dimensions uses shared terminal geometry; separate sessions avoid display cropping or apparent alignment shifts.
 
 ## Local verification
 

@@ -8,19 +8,26 @@ import (
 	"os"
 
 	"github.com/migsalazar/labtop/internal/app"
+	"github.com/migsalazar/labtop/internal/config"
 )
 
 const description = "Display the small-display-first Labtop monitor."
 
 func main() {
-	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr, app.Run))
+	os.Exit(run(os.Args[1:], os.Stdout, os.Stderr, config.Load, app.Run))
 }
 
-func run(args []string, stdout, stderr io.Writer, runApp func() error) int {
+func run(
+	args []string,
+	stdout, stderr io.Writer,
+	loadConfig func(string) (config.Config, error),
+	runApp func(config.Config) error,
+) int {
 	flags := flag.NewFlagSet("labtop", flag.ContinueOnError)
 	flags.SetOutput(stderr)
+	configPath := flags.String("config", "", "path to a TOML configuration file")
 	flags.Usage = func() {
-		fmt.Fprintln(stdout, "Usage: labtop")
+		fmt.Fprintln(stdout, "Usage: labtop [--config PATH]")
 		fmt.Fprintln(stdout)
 		fmt.Fprintln(stdout, description)
 	}
@@ -36,7 +43,24 @@ func run(args []string, stdout, stderr io.Writer, runApp func() error) int {
 		return 2
 	}
 
-	if err := runApp(); err != nil {
+	configFlagSet := false
+	flags.Visit(func(current *flag.Flag) {
+		if current.Name == "config" {
+			configFlagSet = true
+		}
+	})
+	if configFlagSet && *configPath == "" {
+		fmt.Fprintln(stderr, "labtop: configuration: --config path must not be empty")
+		return 1
+	}
+
+	configuration, err := loadConfig(*configPath)
+	if err != nil {
+		fmt.Fprintf(stderr, "labtop: configuration: %v\n", err)
+		return 1
+	}
+
+	if err := runApp(configuration); err != nil {
 		fmt.Fprintf(stderr, "labtop: %v\n", err)
 		return 1
 	}

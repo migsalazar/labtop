@@ -3,6 +3,7 @@ package app
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/migsalazar/labtop/internal/config"
 )
 
 var (
@@ -33,13 +34,14 @@ var (
 
 // Model is the initial Labtop Bubble Tea model.
 type Model struct {
+	config config.Config
 	width  int
 	height int
 }
 
 // NewModel returns the truthful initial placeholder model.
-func NewModel() Model {
-	return Model{}
+func NewModel(configuration config.Config) Model {
+	return Model{config: configuration}
 }
 
 // Init starts no background work in the current scaffold.
@@ -67,7 +69,7 @@ func (model Model) Update(message tea.Msg) (tea.Model, tea.Cmd) {
 func (model Model) View() string {
 	content := lipgloss.JoinVertical(
 		lipgloss.Center,
-		titleStyle.Render("LABTOP // CONSOLE"),
+		titleStyle.Render(model.config.Console.Title),
 		"",
 		bodyStyle.Render("Monitoring features are not implemented yet."),
 		"",
@@ -88,8 +90,8 @@ func (model Model) View() string {
 }
 
 // Run starts Labtop in the terminal alternate screen.
-func Run() error {
-	program := tea.NewProgram(NewModel(), tea.WithAltScreen())
+func Run(configuration config.Config) error {
+	program := tea.NewProgram(NewModel(configuration), tea.WithAltScreen())
 	_, err := program.Run()
 	return err
 }

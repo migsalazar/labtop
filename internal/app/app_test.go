@@ -6,6 +6,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/migsalazar/labtop/internal/config"
 )
 
 func TestTerminalColorFallbacks(t *testing.T) {
@@ -34,13 +35,14 @@ func TestTerminalColorFallbacks(t *testing.T) {
 	}
 }
 
-func TestModelRendersTruthfulPlaceholder(t *testing.T) {
+func TestModelRendersTruthfulConfiguredPlaceholder(t *testing.T) {
 	t.Parallel()
 
-	view := NewModel().View()
+	configuration := config.Config{Console: config.Console{Title: "TEST // CONSOLE"}}
+	view := NewModel(configuration).View()
 
 	for _, expected := range []string{
-		"LABTOP // CONSOLE",
+		"TEST // CONSOLE",
 		"Monitoring features are not implemented yet.",
 		"q quit",
 	} {
@@ -53,7 +55,7 @@ func TestModelRendersTruthfulPlaceholder(t *testing.T) {
 func TestModelRecordsTerminalSize(t *testing.T) {
 	t.Parallel()
 
-	updated, command := NewModel().Update(tea.WindowSizeMsg{Width: 100, Height: 30})
+	updated, command := NewModel(config.Config{}).Update(tea.WindowSizeMsg{Width: 100, Height: 30})
 	if command != nil {
 		t.Fatal("resize returned an unexpected command")
 	}
@@ -82,7 +84,7 @@ func TestModelQuitKeys(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 
-			_, command := NewModel().Update(test.key)
+			_, command := NewModel(config.Config{}).Update(test.key)
 			if command == nil {
 				t.Fatal("quit key returned no command")
 			}

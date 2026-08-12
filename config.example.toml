@@ -1,0 +1,96 @@
+# Labtop example configuration.
+# Copy this file to config.toml for local use. Keep real infrastructure details
+# in that ignored local file, not in reusable source.
+
+[console]
+title = "LABTOP // CONSOLE"
+clock_format = "15:04:05"
+
+[layout]
+columns = 3
+
+[attention]
+enabled = true
+return_home_seconds = 15
+event_types = [
+  "machine.offline",
+  "system.temperature_warning",
+  "system.disk_warning",
+]
+
+[network]
+external_probe_seconds = 15
+external_probe_timeout_seconds = 2
+
+# External reachability is opt-in. This documentation-only example is disabled.
+# [[network.external_targets]]
+# label = "EXAMPLE ENDPOINT"
+# host = "203.0.113.0"
+# port = 443
+
+[[modules]]
+id = "local-system"
+type = "system"
+title = "SYSTEM"
+column = 0
+row = 0
+column_span = 1
+row_span = 1
+refresh_seconds = 1
+
+[modules.system]
+local_label = "LOCAL NODE"
+slow_refresh_seconds = 5
+network_interface = ""
+sparkline_minutes = 15
+sparkline_sample_seconds = 5
+temperature_warning_celsius = 80
+disk_warning_percent = 90
+
+[[modules]]
+id = "active-agents"
+type = "agents"
+title = "AGENTS"
+column = 1
+row = 0
+column_span = 2
+row_span = 1
+
+[modules.agents]
+provider = ""
+
+[[modules]]
+id = "machines"
+type = "machines"
+title = "MACHINES"
+column = 0
+row = 1
+column_span = 2
+row_span = 1
+refresh_seconds = 5
+
+[modules.machines]
+probe_timeout_seconds = 1.5
+
+# These TEST-NET addresses are reserved for documentation and are not real
+# services. Replace or remove them only in an ignored local config.toml.
+[[modules.machines.items]]
+id = "node-a"
+label = "NODE A"
+host = "192.0.2.10"
+port = 12345
+
+[[modules.machines.items]]
+id = "node-b"
+label = "NODE B"
+host = "198.51.100.20"
+port = 23456
+
+[[modules]]
+id = "recent-events"
+type = "events"
+title = "EVENTS"
+column = 2
+row = 1
+column_span = 1
+row_span = 1
