@@ -24,12 +24,13 @@ func TestModuleUpdateClosedValues(t *testing.T) {
 
 	updates := []ModuleUpdate{
 		SystemUpdate{},
+		SystemSampleUpdate{},
 		MachinesUpdate{},
 		LocalInterfaceUpdate{},
 		ExternalReachabilityUpdate{},
 	}
-	if len(updates) != 4 {
-		t.Fatalf("updates = %d, want 4", len(updates))
+	if len(updates) != 5 {
+		t.Fatalf("updates = %d, want 5", len(updates))
 	}
 }
 

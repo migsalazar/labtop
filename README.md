@@ -12,10 +12,11 @@ The current application:
 - Provides `--help`
 - Loads validated local TOML configuration before entering the alternate screen
 - Supports a configured display title and a validated three-column arrangement of built-in module definitions
-- Provides typed in-memory snapshot, status, event, bounded-history, formatting, and fixed-scale sparkline primitives for later monitoring stages
-- Contains no collectors, network probes, live metrics, persistence, or external-process integration
+- Provides typed in-memory snapshot, status, event, bounded-history, formatting, and fixed-scale sparkline primitives
+- Includes an isolated local system collector for CPU, memory, root-disk, temperature, network-rate, uptime, interface-state, sampling, and threshold-transition updates
+- Contains no active collectors, remote network probes, displayed live metrics, persistence, or external-process integration
 
-Monitoring features are not implemented yet. The data primitives are not connected to the TUI, and configured modules are validated but are not rendered or collected yet.
+Monitoring is not visible yet. The system collector is implemented and tested but is not started or connected to the TUI; configured modules are validated but are not rendered yet.
 
 ## Configuration
 
@@ -29,7 +30,7 @@ Without `--config`, Labtop looks for `config.toml` in the current directory. If 
 
 Configuration is decoded strictly. Unknown fields, unsupported module types, mismatched settings blocks, invalid intervals, invalid machine ports, and overlapping or out-of-bounds grid positions fail before the TUI starts.
 
-The built-in module registry currently recognizes `system`, `machines`, `agents`, and `events`. No collector or agent provider is implemented. External targets and machine definitions are configuration data only and are never contacted by the current application.
+The built-in module registry currently recognizes `system`, `machines`, `agents`, and `events`. Only the isolated system collector is implemented, and the application does not start it yet. No machine collector, external-target probe, or agent provider is implemented. External targets and machine definitions are configuration data only and are never contacted by the current application.
 
 Use `config.example.toml` as the sanitized reference. Keep deployment-specific values in the ignored local `config.toml`. Do not put credentials, tokens, or secrets in configuration; Labtop does not accept or require them.
 

@@ -204,11 +204,11 @@ func TestNumericValidation(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]string{
-		"zero refresh":        strings.Replace(systemConfig(), "refresh_seconds = 1", "refresh_seconds = 0", 1),
-		"negative timeout":    strings.Replace(machinesConfig(""), "probe_timeout_seconds = 1.5", "probe_timeout_seconds = -1", 1),
-		"zero disk threshold": strings.Replace(systemConfig(), "disk_warning_percent = 90", "disk_warning_percent = 0", 1),
-		"nonintegral history": strings.Replace(systemConfig(), "sparkline_sample_seconds = 5", "sparkline_sample_seconds = 7", 1),
-		"duration overflow":   strings.Replace(minimalConfig(""), "return_home_seconds = 15", "return_home_seconds = 1e30", 1),
+		"zero refresh":                    strings.Replace(systemConfig(), "refresh_seconds = 1", "refresh_seconds = 0", 1),
+		"negative timeout":                strings.Replace(machinesConfig(""), "probe_timeout_seconds = 1.5", "probe_timeout_seconds = -1", 1),
+		"disk threshold below hysteresis": strings.Replace(systemConfig(), "disk_warning_percent = 90", "disk_warning_percent = 4.9", 1),
+		"nonintegral history":             strings.Replace(systemConfig(), "sparkline_sample_seconds = 5", "sparkline_sample_seconds = 7", 1),
+		"duration overflow":               strings.Replace(minimalConfig(""), "return_home_seconds = 15", "return_home_seconds = 1e30", 1),
 	}
 	for name, content := range tests {
 		content := content

@@ -272,8 +272,8 @@ func validateSystem(prefix string, raw rawSystemSettings) (*SystemSettings, erro
 		return nil, fmt.Errorf("%s.temperature_warning_celsius must be finite", prefix)
 	}
 	disk := value(raw.DiskWarningPercent)
-	if !finite(disk) || disk <= 0 || disk > 100 {
-		return nil, fmt.Errorf("%s.disk_warning_percent must be greater than 0 and at most 100", prefix)
+	if !finite(disk) || disk < 5 || disk > 100 {
+		return nil, fmt.Errorf("%s.disk_warning_percent must be from 5 through 100", prefix)
 	}
 	return &SystemSettings{
 		LocalLabel: value(raw.LocalLabel), SlowRefresh: slowRefresh,
