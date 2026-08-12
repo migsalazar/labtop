@@ -5,7 +5,8 @@
 - The current Linux ARM64 build is pure Go and works with `CGO_ENABLED=0`.
 - Configuration is local TOML, decoded strictly and validated before the alternate terminal screen opens.
 - Keep `config.example.toml` sanitized and generic. Keep real `config.toml`, `.env` files, credentials, tokens, secrets, and private infrastructure details out of Git.
-- The current application has no collectors, network probes, metrics, persistence, or external-process integration. Configured modules and targets are validation data only.
+- Shared monitoring values use typed immutable snapshots, normalized events, explicit optional values, deterministic formatting, and fixed-capacity in-memory history.
+- The current application has no collectors, network probes, live metrics, persistence, or external-process integration. Configured modules and targets are validation data only.
 - Keep reusable source generic. Do not hardcode deployment-specific hostnames, addresses, machine roles, services, integrations, or identity.
 - Bubble Tea `View` methods and rendering helpers must not perform network, filesystem, process, or other blocking work.
 - Keep the console read-only. Do not add remote execution or administrative controls without an explicit design decision.

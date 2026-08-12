@@ -12,9 +12,10 @@ The current application:
 - Provides `--help`
 - Loads validated local TOML configuration before entering the alternate screen
 - Supports a configured display title and a validated three-column arrangement of built-in module definitions
-- Contains no collectors, network probes, metrics, persistence, or external-process integration
+- Provides typed in-memory snapshot, status, event, bounded-history, formatting, and fixed-scale sparkline primitives for later monitoring stages
+- Contains no collectors, network probes, live metrics, persistence, or external-process integration
 
-Monitoring features are not implemented yet. Configured modules are validated but are not rendered or collected yet.
+Monitoring features are not implemented yet. The data primitives are not connected to the TUI, and configured modules are validated but are not rendered or collected yet.
 
 ## Configuration
 
