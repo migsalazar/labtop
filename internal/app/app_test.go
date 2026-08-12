@@ -5,7 +5,34 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
+
+func TestTerminalColorFallbacks(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name      string
+		color     lipgloss.CompleteColor
+		trueColor string
+		ansi256   string
+		ansi      string
+	}{
+		{name: "identity", color: identityColor, trueColor: "#9B7CFF", ansi256: "13", ansi: "13"},
+		{name: "primary", color: primaryColor, trueColor: "#F0F0E6", ansi256: "15", ansi: "15"},
+		{name: "secondary", color: secondaryColor, trueColor: "#7D828A", ansi256: "8", ansi: "8"},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel()
+
+			if test.color.TrueColor != test.trueColor || test.color.ANSI256 != test.ansi256 || test.color.ANSI != test.ansi {
+				t.Fatalf("color = %#v, want TrueColor %q, ANSI256 %q, ANSI %q", test.color, test.trueColor, test.ansi256, test.ansi)
+			}
+		})
+	}
+}
 
 func TestModelRendersTruthfulPlaceholder(t *testing.T) {
 	t.Parallel()

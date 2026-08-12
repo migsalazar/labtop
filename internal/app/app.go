@@ -5,13 +5,23 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
-const (
-	identityColor  = lipgloss.Color("#9B7CFF")
-	primaryColor   = lipgloss.Color("#F0F0E6")
-	secondaryColor = lipgloss.Color("#7D828A")
-)
-
 var (
+	identityColor = lipgloss.CompleteColor{
+		TrueColor: "#9B7CFF",
+		ANSI256:   "13",
+		ANSI:      "13",
+	}
+	primaryColor = lipgloss.CompleteColor{
+		TrueColor: "#F0F0E6",
+		ANSI256:   "15",
+		ANSI:      "15",
+	}
+	secondaryColor = lipgloss.CompleteColor{
+		TrueColor: "#7D828A",
+		ANSI256:   "8",
+		ANSI:      "8",
+	}
+
 	titleStyle = lipgloss.NewStyle().
 			Bold(true).
 			Foreground(identityColor)
